@@ -69,7 +69,7 @@ defmodule ExAws.STS.Mixfile do
   defp ex_aws() do
     case System.get_env("AWS") do
       "LOCAL" -> {:ex_aws, path: "../ex_aws"}
-      _ -> {:ex_aws, "~> 2.2"}
+      _ -> {:ex_aws, "~> 2.3"}
     end
   end
 end
