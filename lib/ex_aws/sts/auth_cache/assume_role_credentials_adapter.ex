@@ -11,7 +11,12 @@ defmodule ExAws.STS.AuthCache.AssumeRoleCredentialsAdapter do
     adapt_auth_config(auth, profile, expiration, &load_credentials/1)
   end
 
-  def adapt_auth_config(%{source_profile: source_profile} = auth, _, expiration, loader) do
+  def adapt_auth_config(
+        %{source_profile: source_profile, role_arn: _} = auth,
+        _,
+        expiration,
+        loader
+      ) do
     source_profile_auth = loader.(source_profile)
     get_security_credentials(auth, source_profile_auth, expiration)
   end
@@ -29,17 +34,19 @@ defmodule ExAws.STS.AuthCache.AssumeRoleCredentialsAdapter do
       end
 
     assume_role_config =
-      ExAws.Config.new(:sts, Map.merge(Map.take(auth, [:role_arn]), source_profile_auth))
+      ExAws.Config.new(:sts, Map.put(source_profile_auth, :role_arn, auth.role_arn))
+
+    role_arn = assume_role_config.role_arn
 
     assume_role_request =
-      ExAws.STS.assume_role(assume_role_config.role_arn, role_session_name, assume_role_options)
+      ExAws.STS.assume_role(role_arn, role_session_name, assume_role_options)
 
     with {:ok, result} <- ExAws.request(assume_role_request, assume_role_config) do
       %{
         access_key_id: result.body.access_key_id,
         secret_access_key: result.body.secret_access_key,
         security_token: result.body.session_token,
-        role_arn: assume_role_config.role_arn,
+        role_arn: role_arn,
         role_session_name: role_session_name,
         source_profile: auth.source_profile
       }

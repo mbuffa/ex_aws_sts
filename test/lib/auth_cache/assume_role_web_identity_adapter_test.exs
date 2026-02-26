@@ -36,17 +36,17 @@ defmodule ExAws.STS.AuthCache.AssumeRoleWebIdentityAdapterTest do
       }
 
       body = """
-<AssumeRoleWithWebIdentityResponse>
-  <AssumeRoleWithWebIdentityResult>
-    <Credentials>
-      <AccessKeyId>1</AccessKeyId>
-      <SecretAccessKey>secret</SecretAccessKey>
-      <SessionToken>token</SessionToken>
-    </Credentials>
-  </AssumeRoleWithWebIdentityResult>
-  <ResponseMetadata><RequestId>req-id</RequestId></ResponseMetadata>
-</AssumeRoleWithWebIdentityResponse>
-"""
+      <AssumeRoleWithWebIdentityResponse>
+        <AssumeRoleWithWebIdentityResult>
+          <Credentials>
+            <AccessKeyId>1</AccessKeyId>
+            <SecretAccessKey>secret</SecretAccessKey>
+            <SessionToken>token</SessionToken>
+          </Credentials>
+        </AssumeRoleWithWebIdentityResult>
+        <ResponseMetadata><RequestId>req-id</RequestId></ResponseMetadata>
+      </AssumeRoleWithWebIdentityResponse>
+      """
 
       ExAws.Request.HttpMock
       |> expect(:request, fn _method,
@@ -83,17 +83,17 @@ defmodule ExAws.STS.AuthCache.AssumeRoleWebIdentityAdapterTest do
       }
 
       body = """
-<AssumeRoleWithWebIdentityResponse>
-  <AssumeRoleWithWebIdentityResult>
-    <Credentials>
-      <AccessKeyId>1</AccessKeyId>
-      <SecretAccessKey>secret</SecretAccessKey>
-      <SessionToken>token</SessionToken>
-    </Credentials>
-  </AssumeRoleWithWebIdentityResult>
-  <ResponseMetadata><RequestId>req-id</RequestId></ResponseMetadata>
-</AssumeRoleWithWebIdentityResponse>
-"""
+      <AssumeRoleWithWebIdentityResponse>
+        <AssumeRoleWithWebIdentityResult>
+          <Credentials>
+            <AccessKeyId>1</AccessKeyId>
+            <SecretAccessKey>secret</SecretAccessKey>
+            <SessionToken>token</SessionToken>
+          </Credentials>
+        </AssumeRoleWithWebIdentityResult>
+        <ResponseMetadata><RequestId>req-id</RequestId></ResponseMetadata>
+      </AssumeRoleWithWebIdentityResponse>
+      """
 
       ExAws.Request.HttpMock
       |> expect(:request, fn _method,

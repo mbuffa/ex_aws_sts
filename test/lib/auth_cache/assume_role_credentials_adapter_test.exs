@@ -9,17 +9,17 @@ defmodule ExAws.STS.AuthCache.AssumeRoleCredentialsAdapterTest do
     auth = test_loader(profile)
 
     body = """
-<AssumeRoleResponse>
-  <AssumeRoleResult>
-    <Credentials>
-      <AccessKeyId>1</AccessKeyId>
-      <SecretAccessKey>secret</SecretAccessKey>
-      <SessionToken>token</SessionToken>
-    </Credentials>
-  </AssumeRoleResult>
-  <ResponseMetadata><RequestId>req-id</RequestId></ResponseMetadata>
-</AssumeRoleResponse>
-"""
+    <AssumeRoleResponse>
+      <AssumeRoleResult>
+        <Credentials>
+          <AccessKeyId>1</AccessKeyId>
+          <SecretAccessKey>secret</SecretAccessKey>
+          <SessionToken>token</SessionToken>
+        </Credentials>
+      </AssumeRoleResult>
+      <ResponseMetadata><RequestId>req-id</RequestId></ResponseMetadata>
+    </AssumeRoleResponse>
+    """
 
     ExAws.Request.HttpMock
     |> expect(:request, fn _method,
@@ -48,7 +48,7 @@ defmodule ExAws.STS.AuthCache.AssumeRoleCredentialsAdapterTest do
     on_exit(fn -> System.delete_env("ROLE_ARN") end)
 
     profile = "default"
-    auth = %{test_loader("default") | role_arn: {:system, "ROLE_ARN"}}
+    auth = test_loader("system-role")
 
     body = """
     <AssumeRoleResponse>
@@ -85,10 +85,26 @@ defmodule ExAws.STS.AuthCache.AssumeRoleCredentialsAdapterTest do
              AssumeRoleCredentialsAdapter.adapt_auth_config(auth, profile, 300, &test_loader/1)
   end
 
+  test "#adapt_auth_config passes through auth when role_arn is missing" do
+    profile = "default"
+    auth = Map.delete(test_loader("default"), :role_arn)
+
+    assert auth ==
+             AssumeRoleCredentialsAdapter.adapt_auth_config(auth, profile, 300, &test_loader/1)
+  end
+
   defp test_loader("default") do
     %{
       source_profile: "source",
       role_arn: "1111111/test_role",
+      role_session_name: "test"
+    }
+  end
+
+  defp test_loader("system-role") do
+    %{
+      source_profile: "source",
+      role_arn: {:system, "ROLE_ARN"},
       role_session_name: "test"
     }
   end
