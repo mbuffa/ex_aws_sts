@@ -28,7 +28,8 @@ defmodule ExAws.STS.AuthCache.AssumeRoleCredentialsAdapter do
         _ -> [duration: duration]
       end
 
-    assume_role_config = ExAws.Config.new(:sts, source_profile_auth)
+    assume_role_config =
+      ExAws.Config.new(:sts, Map.merge(Map.take(auth, [:role_arn]), source_profile_auth))
 
     assume_role_request =
       ExAws.STS.assume_role(assume_role_config.role_arn, role_session_name, assume_role_options)
@@ -38,7 +39,7 @@ defmodule ExAws.STS.AuthCache.AssumeRoleCredentialsAdapter do
         access_key_id: result.body.access_key_id,
         secret_access_key: result.body.secret_access_key,
         security_token: result.body.session_token,
-        role_arn: auth.role_arn,
+        role_arn: assume_role_config.role_arn,
         role_session_name: role_session_name,
         source_profile: auth.source_profile
       }

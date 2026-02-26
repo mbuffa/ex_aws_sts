@@ -35,11 +35,18 @@ defmodule ExAws.STS.AuthCache.AssumeRoleWebIdentityAdapterTest do
         http_client: ExAws.Request.HttpMock
       }
 
-      body = %{
-        access_key_id: "1",
-        secret_access_key: "secret",
-        session_token: "token"
-      }
+      body = """
+<AssumeRoleWithWebIdentityResponse>
+  <AssumeRoleWithWebIdentityResult>
+    <Credentials>
+      <AccessKeyId>1</AccessKeyId>
+      <SecretAccessKey>secret</SecretAccessKey>
+      <SessionToken>token</SessionToken>
+    </Credentials>
+  </AssumeRoleWithWebIdentityResult>
+  <ResponseMetadata><RequestId>req-id</RequestId></ResponseMetadata>
+</AssumeRoleWithWebIdentityResponse>
+"""
 
       ExAws.Request.HttpMock
       |> expect(:request, fn _method,
@@ -51,9 +58,9 @@ defmodule ExAws.STS.AuthCache.AssumeRoleWebIdentityAdapterTest do
       end)
 
       expected = %{
-        access_key_id: body.access_key_id,
-        secret_access_key: body.secret_access_key,
-        security_token: body.session_token,
+        access_key_id: "1",
+        secret_access_key: "secret",
+        security_token: "token",
         role_arn: config.role_arn,
         role_session_name: config.role_session_name,
         expiration: expiration
@@ -75,11 +82,18 @@ defmodule ExAws.STS.AuthCache.AssumeRoleWebIdentityAdapterTest do
         http_client: ExAws.Request.HttpMock
       }
 
-      body = %{
-        access_key_id: "1",
-        secret_access_key: "secret",
-        session_token: "token"
-      }
+      body = """
+<AssumeRoleWithWebIdentityResponse>
+  <AssumeRoleWithWebIdentityResult>
+    <Credentials>
+      <AccessKeyId>1</AccessKeyId>
+      <SecretAccessKey>secret</SecretAccessKey>
+      <SessionToken>token</SessionToken>
+    </Credentials>
+  </AssumeRoleWithWebIdentityResult>
+  <ResponseMetadata><RequestId>req-id</RequestId></ResponseMetadata>
+</AssumeRoleWithWebIdentityResponse>
+"""
 
       ExAws.Request.HttpMock
       |> expect(:request, fn _method,
@@ -91,9 +105,9 @@ defmodule ExAws.STS.AuthCache.AssumeRoleWebIdentityAdapterTest do
       end)
 
       expected = %{
-        access_key_id: body.access_key_id,
-        secret_access_key: body.secret_access_key,
-        security_token: body.session_token,
+        access_key_id: "1",
+        secret_access_key: "secret",
+        security_token: "token",
         role_arn: @role_arn,
         role_session_name: @role_session_name,
         expiration: @expiration
